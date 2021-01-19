@@ -1,55 +1,53 @@
-const { Router } = require('express');
-const { QueryTypes } = require('sequelize');
-const { models, sequelize } = require('../../models');
+const { Router } = require("express");
+const faker = require("faker");
+const { models } = require("../../models");
 
 const router = Router();
 
 router.use((_req, _res, next) => {
-  console.log('Only called for users routes');
+  console.log("Only called for users routes");
   next();
 });
 
-router.get('/', async (req, res) => {
-  // await models.User.create({
-  //   firstName: 'Pranjal',
-  //   lastName: 'Agnihotri',
-  //   email: 'p1.a@gmail.com',
-  //   username: 'ooo',
-  // });
+router.get("/", async (req, res) => {
+  const generatedUser = {
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email(),
+    username: faker.internet.userName(),
+    password: faker.internet.password(5)
+  };
 
-  // const users = await sequelize.query(
-  //   'SELECT * FROM users WHERE username = :username',
-  //   {
-  //     type: QueryTypes.SELECT,
-  //     replacements: {
-  //       username: 'heyhey',
-  //     },
-  //   }
-  // );
+  await models.User.create(generatedUser);
 
-  const users = await models.User.findAll({
-    include: [
-      { model: models.Notes },
-      // { model: models.Notes, as: 'PinnedNote' },
-    ],
+  res.json(generatedUser);
+});
+
+router.get("/check", async (req, res) => {
+  const username = req.query?.username;
+  if (!username) return res.json({ message: "Unprocessable request body" });
+
+  const user = await models.User.findOne({
     where: {
-      username: 'okaygoogle',
-    },
+      username
+    }
   });
-  console.log('Users: ', users);
 
-  // const notes = await models.Notes.create({
-  //   title: 'Hello world',
-  //   description: 'Lets write some React today?',
-  //   userId: users[0].id,
-  // });
+  if (!user) return res.json({ message: "User does not exists" });
+  console.log("User: ", user);
 
-  const notes = await sequelize.query(
-    `SELECT * FROM notes WHERE "userId" = (SELECT id from users WHERE username = 'okaygoogle') ORDER BY "updatedAt" ASC`
-  );
+  let order = 1;
 
-  console.log('Notes: ', notes);
-  res.send('hey');
+  if (user.order) order = user.order + 1;
+
+  await user.update({
+    order
+  });
+
+  return res.json({
+    username: user.username,
+    order: user.order
+  });
 });
 
 module.exports = router;

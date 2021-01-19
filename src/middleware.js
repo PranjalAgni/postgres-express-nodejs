@@ -1,4 +1,4 @@
-const { StatusCodes } = require('http-status-codes');
+const { StatusCodes } = require("http-status-codes");
 
 const notFound = (req, res, next) => {
   res.status(StatusCodes.NOT_FOUND);
@@ -11,12 +11,12 @@ const errorHandler = (error, _req, res, next) => {
   res.json({
     status: statusCode,
     result: null,
-    error: process.env.NODE_ENV === 'production' ? true : error.stack,
+    error: process.env.NODE_ENV === "production" ? true : error.stack
   });
   next();
 };
 
 module.exports = {
   notFound,
-  errorHandler,
+  errorHandler
 };

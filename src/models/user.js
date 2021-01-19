@@ -1,22 +1,36 @@
 const user = (sequelize, DataTypes) => {
-  const User = sequelize.define('user', {
+  const User = sequelize.define("user", {
+    pkUserId: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      field: "pk_user_id",
+      autoIncrement: true
+    },
     username: {
       type: DataTypes.STRING,
       unique: true,
+      allowNull: false
     },
-    firstName: DataTypes.STRING,
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     lastName: DataTypes.STRING,
     email: {
       type: DataTypes.STRING,
       unique: true,
+      allowNull: false
     },
-    password: DataTypes.STRING,
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    order: {
+      type: DataTypes.INTEGER
+    }
   });
 
-  User.associate = (models) => {
-    User.hasMany(models.Notes);
-    // User.belongsTo(models.Notes, { as: 'PinnedNote', constraints: false });
-  };
+  User.associate = () => {};
 
   return User;
 };

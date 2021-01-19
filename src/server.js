@@ -1,6 +1,6 @@
-const express = require('express');
-const config = require('./config/index');
-const mainApp = require('./app.js');
+const express = require("express");
+const config = require("./config/index");
+const mainApp = require("./app.js");
 
 const startServer = async () => {
   const app = express();
