@@ -10,7 +10,8 @@ const { notFound, errorHandler } = require("./middleware");
 const initalizeServer = async (app) => {
   // connect to DB
   await sequelize.authenticate();
-  // await sequelize.sync({ force: true });
+
+  await sequelize.sync({ force: true });
 
   // If we are behind some reverse proxy like Nginx then we can trust this
   app.enable("trust proxy");

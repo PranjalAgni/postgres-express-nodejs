@@ -6,7 +6,7 @@ const sequelize = new Sequelize({
   host: db.host,
   database: db.name,
   username: db.username,
-  password: null,
+  password: db.password,
   logging: console.log
 });
 

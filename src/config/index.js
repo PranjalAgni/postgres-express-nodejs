@@ -13,8 +13,8 @@ module.exports = {
   port: parseInt(process.env.PORT, 10),
   db: {
     host: process.env.DB_HOST,
-    name: process.env.DB_NAME,
-    username: process.env.DB_USERNAME,
+    name: process.env.DB_SCHEMA,
+    username: process.env.DB_USER,
     password: process.env.DB_PASSWORD
   }
 };
